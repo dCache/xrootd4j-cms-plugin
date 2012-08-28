@@ -1,4 +1,17 @@
-xrootd4j-cms-plugin
-===================
+Authorization and mapping plugin for xrootd4j and dCache
+========================================================
 
-Mapping plugin for xrootd4j to map CMS PFN to LFN according to the site's mapping rules in storage.xml.
+This is an authorization and mapping plugin for xrootd4j and dCache.
+
+To compile the plugin, run:
+
+    mvn package
+
+
+The plugin can be tested by loading it with the xrootd4j standalone
+server available from http://github.com/gbehrmann/xrootd4j:
+
+    java -Dlog=debug 
+         -jar /path/to/xrootd4j/xrootd4j-standalone-1.0.1-jar-with-dependencies.jar \
+         --plugins target/cms-ns-mapping-1.0-SNAPSHOT/ \
+         --authz org.dcache.xrootd4j
