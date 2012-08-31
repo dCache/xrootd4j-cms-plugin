@@ -19,33 +19,28 @@
  */
 package org.dcache.xrootd4j
 
-import org.dcache.xrootd.plugins.AuthorizationFactory
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.FlatSpec
+import org.junit.runner.RunWith
 import java.util.Properties
-import xml.XML
 
-object CmsMappingFactory
-{
-    final val Name = "xrootd4j.cms.settings"
+@RunWith(classOf[JUnitRunner])
+class CmsMappingProviderTest extends FlatSpec {
 
-    final val AlternativeNames = Set(Name)
+  def provider = new CmsMappingProvider
 
-    final val FilenameProperty = "xrootd.cms.storage.path"
+  "A CMS mapping provider" should "return a CmsMappingFactory if called with the factories name" in {
+    val properties = new Properties()
+    properties.put(CmsMappingFactory.FilenameProperty, "settings.xml")
+    val factory = provider.createFactory(CmsMappingFactory.Name, properties)
 
-    def hasName(name : String) = (AlternativeNames contains name)
-}
+    assert(factory != null)
+  }
 
-class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
-{
-    val filename = properties.getProperty(CmsMappingFactory.FilenameProperty)
-    require(filename.nonEmpty)
-
-    override def getName = CmsMappingFactory.Name
-
-    override def getDescription = "CMS Name Mapping Plugin"
-
-    override def createHandler = {
-        val xml = XML.loadFile(filename)
-        val mappings = CmsSettingsParser.parse(xml)
-        new CmsMappingHandler(mappings)
+  it should "return null for non matching names" in {
+    expect (null) {
+      provider.createFactory("other", new Properties())
     }
+  }
+
 }

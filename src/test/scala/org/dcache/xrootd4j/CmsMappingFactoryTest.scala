@@ -19,33 +19,27 @@
  */
 package org.dcache.xrootd4j
 
-import org.dcache.xrootd.plugins.AuthorizationFactory
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.FlatSpec
+import org.junit.runner.RunWith
 import java.util.Properties
-import xml.XML
 
-object CmsMappingFactory
-{
-    final val Name = "xrootd4j.cms.settings"
+@RunWith(classOf[JUnitRunner])
+class CmsMappingFactoryTest extends FlatSpec {
 
-    final val AlternativeNames = Set(Name)
+  "The CmsMappingFactory" should "have name xrootd4j.cms.settings" in {
+    assert(CmsMappingFactory.hasName("xrootd4j.cms.settings"))
+  }
 
-    final val FilenameProperty = "xrootd.cms.storage.path"
-
-    def hasName(name : String) = (AlternativeNames contains name)
-}
-
-class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
-{
-    val filename = properties.getProperty(CmsMappingFactory.FilenameProperty)
-    require(filename.nonEmpty)
-
-    override def getName = CmsMappingFactory.Name
-
-    override def getDescription = "CMS Name Mapping Plugin"
-
-    override def createHandler = {
-        val xml = XML.loadFile(filename)
-        val mappings = CmsSettingsParser.parse(xml)
-        new CmsMappingHandler(mappings)
+  it should "throw an NPE for null properties" in {
+    intercept[NullPointerException] {
+      new CmsMappingFactory(null)
     }
+  }
+
+  it should "throw an NPE if the filename property is missing" in {
+    intercept[NullPointerException] {
+      new CmsMappingFactory(new Properties)
+    }
+  }
 }

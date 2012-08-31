@@ -1,19 +1,34 @@
+/**
+ * Copyright (C) 2011,2012 dCache.org <support@dcache.org>
+ *
+ * This file is part of xrootd4j.
+ *
+ * xrootd4j is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * xrootd4j is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with xrootd4j.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ */
 package org.dcache.xrootd4j
 
 import scala.xml._
-import collection.immutable.ListMap
 
 object CmsSettingsParser {
 
-    def parse(xmlString : String) : Map[String, String] = {
-      val nodes = (XML.loadString(xmlString) \ "pfn-to-lfn")
-        nodes.map(node => {
-          val a = getAttribute(node)(_)
-          val paths = buildPathMatchFor(Option.apply(node))(nodes)
-          paths.map(path => {
-            (a("protocol") + "://" + path._1 -> path._2)
-          })
-        }).foldLeft(ListMap[String, String]())(_ ++ _)
+    def parse(rootNode : Node) : Map[String, String] = {
+      val nodes = (rootNode \ "lfn-to-pfn")
+        nodes.flatMap(node => {
+          val paths = buildPathMatchFor(node)(nodes)
+          paths.map(path => (getAttribute(node)("protocol") + "://" + path._1 -> path._2))
+        }).toMap
     }
 
     def getAttribute(node : Node)(attribute : String) =
@@ -22,24 +37,27 @@ object CmsSettingsParser {
         case _ => throw new IllegalStateException("attribute " + attribute + " is missing in node " + node)
     }
 
-    def buildPathMatchFor(node : Option[Node])(fromNodes : NodeSeq) : List[(String, String)] = {
-      node match {
-        case Some(currentNode) => {
-          val a = getAttribute(currentNode)(_)
-          currentNode.attribute("chain") match {
-            case Some(chainedProtocol) => (List[(String, String)]() /:
-              fromNodes.filter(fromNode => fromNode.attribute("protocol") match {
-                case Some(protocol) => protocol == chainedProtocol
-                case None => false
-              }).map(chainNode => {
-                val subNodes = buildPathMatchFor(Option.apply(chainNode))(fromNodes)
-                subNodes.map(chainedPath =>
-                  (a("path-match").replace("(.*)", chainedPath._1), a("result").replace("$1", chainedPath._2)))
-              }))(_ ++ _)
-            case None => List((a("path-match"), a("result")))
-          }
-        }
-        case None => Nil
+    def buildPathMatchFor(node : Node)(fromNodes : NodeSeq) : List[(String, String)] = {
+      val withAttributes = getAttribute(node)(_)
+      node.attribute("chain") match {
+        case Some(chainedProtocol) => nodesFilteredBy(chainedProtocol.text)(fromNodes)
+          .flatMap(chainNode => toMatchResultTupleListFrom(chainNode)(withAttributes)(fromNodes))
+          .toList
+        case None => List((withAttributes("path-match"), withAttributes("result")))
       }
+    }
+
+    def nodesFilteredBy(protocol : String)(fromNodes : NodeSeq) =
+      fromNodes.filter(fromNode => fromNode.attribute("protocol") match {
+        case Some(p) => p.text == protocol
+        case None => false
+      })
+
+    def toMatchResultTupleListFrom(node : Node)(withAttributes : String => String)(fromNodes : NodeSeq) = {
+      val subMatchResultTuples = buildPathMatchFor(node)(fromNodes)
+      subMatchResultTuples.map(tuple =>
+        (withAttributes("path-match").replace("(.*)", tuple._1),
+         withAttributes("result")    .replace(  "$1", tuple._2))
+      )
     }
 }

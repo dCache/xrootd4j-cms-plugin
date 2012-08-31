@@ -8,7 +8,7 @@
   </parent>
 
   <groupId>org.dcache.xrootd4j</groupId>
-  <artifactId>cms-ns-mapping</artifactId>
+  <artifactId>xrootd4j-cms-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -52,7 +52,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.3.1</version>
+      <version>4.10</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -69,6 +69,12 @@
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-library</artifactId>
         <version>2.9.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest_2.9.2</artifactId>
+        <version>1.7.1</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 
