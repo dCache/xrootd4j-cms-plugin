@@ -29,36 +29,35 @@ class CmsMappingHandlerTest extends FlatSpec
 
   def fixture = new CmsMappingHandler(CmsSettingsParser.parse(DesyStorageXmlFixture))
   val handler = fixture
+  val mappedFilenameFor = handler.authorize(null, null, null, _ : String, null, 0, null)
 
-  "The CMSMappingHandler" should "leave path with unmatched protocol unchanged" in {
+  "The CMSMappingHandler with DESY rules" should "leave path with unmatched protocol unchanged" in {
     expect("ftp://store/blubb") {
-      handler.authorize(null, null, null,
-        "ftp://store/blubb",
-        null, 0, null)
+      mappedFilenameFor("ftp://store/blubb")
     }
   }
 
   it should "leave an unmatched path unchanged" in {
     expect("srm://unmatched/blubb") {
-      handler.authorize(null, null, null,
-        "srm://unmatched/blubb",
-        null, 0, null)
+      mappedFilenameFor("srm://unmatched/blubb")
     }
   }
 
   it should "map a matching path" in {
     expect("root://xrootd.ba.infn.it//somepath/wurstbrot") {
-      handler.authorize(null, null, null,
-        "remote-xrootd:///somepath/wurstbrot",
-        null, 0, null)
+      mappedFilenameFor("remote-xrootd:///somepath/wurstbrot")
     }
   }
 
   it should "map a matching chained rule" in {
     expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/schwupp/ti/du/temp/wurstbrot") {
-      handler.authorize(null, null, null,
-        "srmv2:///schwupp/ti/du/temp/wurstbrot",
-        null, 0, null)
+      mappedFilenameFor("srmv2:///schwupp/ti/du/temp/wurstbrot")
+    }
+  }
+
+  it should "use the rules in the right order" in {
+    expect("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/unmerged/wurstbrot") {
+      mappedFilenameFor("dcap:///+store/unmerged/DCMS/wurstbrot")
     }
   }
 

@@ -20,15 +20,16 @@
 package org.dcache.xrootd4j
 
 import scala.xml._
+import collection.immutable.ListMap
 
 object CmsSettingsParser {
 
     def parse(rootNode : Node) : Map[String, String] = {
       val nodes = (rootNode \ "lfn-to-pfn")
-        nodes.flatMap(node => {
-          val paths = buildPathMatchFor(node)(nodes)
-          paths.map(path => (getAttribute(node)("protocol") + "://" + path._1 -> path._2))
-        }).toMap
+      nodes.flatMap(node => {
+        val paths = buildPathMatchFor(node)(nodes)
+        paths.map(path => (getAttribute(node)("protocol") + "://" + path._1 -> path._2))
+      }).toMap
     }
 
     def getAttribute(node : Node)(attribute : String) =

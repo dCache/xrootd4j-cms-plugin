@@ -34,22 +34,20 @@ class CmsSettingsParserTest extends FlatSpec
     }
   }
 
-  it should "return an empty map for empty xml" in
-    {
-      val map = CmsSettingsParser.parse(<storage/>)
+  it should "return an empty map for empty xml" in {
+    val map = CmsSettingsParser.parse(<storage/>)
 
-      assert(map.isEmpty)
-    }
+    assert(map.isEmpty)
+  }
 
-  it should "return an empty map for no pnf-to-lfn entries" in
-    {
-      val map = CmsSettingsParser.parse(
-        <storage-mapping>
-          <pfn-to-lfn protocol="bla" path-match="(.+)" result="$1"/>
-        </storage-mapping>)
+  it should "return an empty map for no pnf-to-lfn entries" in {
+    val map = CmsSettingsParser.parse(
+      <storage-mapping>
+        <pfn-to-lfn protocol="bla" path-match="(.+)" result="$1"/>
+      </storage-mapping>)
 
-      assert(map.isEmpty)
-    }
+    assert(map.isEmpty)
+  }
 
   it should "combine chained rules" in {
     val map = CmsSettingsParser.parse(
@@ -64,17 +62,69 @@ class CmsSettingsParserTest extends FlatSpec
     }
   }
 
-  it should "understand rules at DESY" in {
+  {
     val map = CmsSettingsParser.parse(DesyStorageXmlFixture)
 
-    expect(32)(map.size)
+    it should "understand rules at DESY" in {
+      expect(32)(map.size)
+    }
 
-    expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/$1") {
-      map.get("srmv2:///+(.*)").get
+    "A map from DESY rules" should "contain mapping for srm LoadTest07" in {
+      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
+        map.get("srm://.*/LoadTest07_DESY_(.*)_.*_.*").get
+      }
+    }
+
+    it should "contain mapping for srmv2 LoadTest07" in {
+      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
+        map.get("srmv2://.*/LoadTest07_DESY_(.*)_.*_.*").get
+      }
+    }
+
+    it should "contain mapping for srm PhEDEx LoadTest07" in {
+      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
+        map.get("srm:///+store/PhEDEx_LoadTest07/(.*)").get
+      }
+    }
+
+    it should "contain mapping for srmv2 PhEDEx LoadTest07" in {
+      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
+        map.get("srmv2:///+store/PhEDEx_LoadTest07/(.*)").get
+      }
+    }
+
+    it should "contain mapping for dcap JobRobot" in {
+      expect("root://dcache-cms-xrootd.desy.de/pnfs/desy.de/cms/tier2/store/mc/JobRobot/$1") {
+        map.get("dcap:///+store/mc/JobRobot/(.*)").get
+      }
+    }
+
+    it should "contain mapping for remote-xrootd" in {
+      expect("root://xrootd.ba.infn.it//$1") {
+        map.get("remote-xrootd:///+(.*)").get
+      }
+    }
+
+    it should "contain chained mapping for dcap" in {
+      expect("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/$1") {
+        map.get("dcap:///+store/DCMS/(.*)").get
+      }
+    }
+
+    it should "contain chained mapping for gsidcap" in {
+      expect("gsidcap://dcache-cms-gsidcap.desy.de:22128//pnfs/desy.de/cms/analysis/dcms/unmerged/$1") {
+        map.get("gsidcap:///+store/unmerged/DCMS/(.*)").get
+      }
+    }
+
+    it should "contain chained mapping for srm" in {
+      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/$1") {
+        map.get("srm:///+(.*)").get
+      }
     }
   }
 
-  it should "understand the rules at CERN" in {
+  "The storage parser" should "understand the rules at CERN" in {
     val map = CmsSettingsParser.parse(CernStorageXmlFixture)
 
     expect(63)(map.size)
