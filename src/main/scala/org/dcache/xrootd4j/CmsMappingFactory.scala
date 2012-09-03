@@ -37,7 +37,7 @@ object CmsMappingFactory
 class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
 {
     val filename = properties.getProperty(CmsMappingFactory.FilenameProperty)
-    require(filename.nonEmpty)
+    require(Option(filename).nonEmpty)
 
     override def getName = CmsMappingFactory.Name
 

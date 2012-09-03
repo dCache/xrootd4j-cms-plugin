@@ -37,8 +37,8 @@ class CmsMappingFactoryTest extends FlatSpec {
     }
   }
 
-  it should "throw an NPE if the filename property is missing" in {
-    intercept[NullPointerException] {
+  it should "throw an IllegalArgumentException if the file property is missing" in {
+    intercept[IllegalArgumentException] {
       new CmsMappingFactory(new Properties)
     }
   }

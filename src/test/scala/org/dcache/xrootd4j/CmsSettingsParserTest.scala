@@ -83,7 +83,5 @@ class CmsSettingsParserTest extends FlatSpec
       map.get("srmv2://.*/LoadTest07_.*_CERN_(.*)_.*_.*").get
     }
   }
-
 }
-
 

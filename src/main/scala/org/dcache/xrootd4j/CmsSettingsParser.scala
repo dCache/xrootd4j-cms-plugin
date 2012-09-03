@@ -38,6 +38,21 @@ object CmsSettingsParser {
     }
 
     def buildPathMatchFor(node : Node)(fromNodes : NodeSeq) : List[(String, String)] = {
+
+      def nodesFilteredBy(protocol : String)(fromNodes : NodeSeq) =
+        fromNodes.filter(fromNode => fromNode.attribute("protocol") match {
+          case Some(p) => p.text == protocol
+          case None => false
+        })
+
+      def toMatchResultTupleListFrom(node : Node)(withAttributes : String => String)(fromNodes : NodeSeq) = {
+        val subMatchResultTuples = buildPathMatchFor(node)(fromNodes)
+        subMatchResultTuples.map(tuple =>
+          (withAttributes("path-match").replace("(.*)", tuple._1),
+           withAttributes("result")    .replace(  "$1", tuple._2))
+        )
+      }
+
       val withAttributes = getAttribute(node)(_)
       node.attribute("chain") match {
         case Some(chainedProtocol) => nodesFilteredBy(chainedProtocol.text)(fromNodes)
@@ -45,19 +60,5 @@ object CmsSettingsParser {
           .toList
         case None => List((withAttributes("path-match"), withAttributes("result")))
       }
-    }
-
-    def nodesFilteredBy(protocol : String)(fromNodes : NodeSeq) =
-      fromNodes.filter(fromNode => fromNode.attribute("protocol") match {
-        case Some(p) => p.text == protocol
-        case None => false
-      })
-
-    def toMatchResultTupleListFrom(node : Node)(withAttributes : String => String)(fromNodes : NodeSeq) = {
-      val subMatchResultTuples = buildPathMatchFor(node)(fromNodes)
-      subMatchResultTuples.map(tuple =>
-        (withAttributes("path-match").replace("(.*)", tuple._1),
-         withAttributes("result")    .replace(  "$1", tuple._2))
-      )
     }
 }
