@@ -1,21 +1,20 @@
 /**
- * Copyright (C) 2011,2012 dCache.org <support@dcache.org>
+ *  This file is part of xrootd4j-cms-plugin.
  *
- * This file is part of xrootd4j.
+ *  xrootd4j-cms-plugin is free software: you can redistribute it and/or
+ *  modify it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
  *
- * xrootd4j is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  xrootd4j-cms-plugin is distributed in the hope that it will be
+ *  useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ *  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
  *
- * xrootd4j is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with xrootd4j-cms-plugin.  If not, see
+ *  <http://www.gnu.org/licenses/.>
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with xrootd4j.  If not, see
- * <http://www.gnu.org/licenses/>.
  */
 package org.dcache.xrootd4j
 
@@ -27,8 +26,8 @@ import org.junit.runner.RunWith
 class CmsMappingHandlerTest extends FlatSpec
   with DesyRulesFixture {
 
-  def fixture = new CmsMappingHandler(CmsSettingsParser.parse(DesyStorageXmlFixture))
-  val handler = fixture
+  val map = CmsSettingsParser.parse(DesyStorageXmlFixture)
+  val handler = new CmsMappingHandler(map)
   val mappedFilenameFor = handler.authorize(null, null, null, _ : String, null, 0, null)
 
   "The CMSMappingHandler with DESY rules" should "leave path with unmatched protocol unchanged" in {
@@ -57,8 +56,7 @@ class CmsMappingHandlerTest extends FlatSpec
 
   it should "use the rules in the right order" in {
     expect("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/unmerged/wurstbrot") {
-      mappedFilenameFor("dcap:///+store/unmerged/DCMS/wurstbrot")
+      mappedFilenameFor("dcap:////store/unmerged/DCMS/wurstbrot")
     }
   }
-
 }
