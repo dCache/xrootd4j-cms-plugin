@@ -23,7 +23,6 @@ import javax.security.auth.Subject
 
 import org.dcache.xrootd.protocol.XrootdProtocol.FilePerm
 import org.dcache.xrootd.plugins.AuthorizationHandler
-import collection.immutable.ListMap
 
 class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHandler
 {

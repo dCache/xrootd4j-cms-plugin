@@ -42,7 +42,7 @@ class CmsMappingFactoryTest extends FlatSpec {
     }
   }
 
-  it should "load the create a handler based on the file at an URL" in {
+  it should "create a handler based on the file at an URL" in {
     val properties = new Properties()
     properties.put(CmsMappingFactory.FilenameProperty, "http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/COMP/SITECONF/T2_DE_DESY/PhEDEx/storage.xml?revision=1.10&content-type=text%2Fplain")
     new CmsMappingFactory(properties)
