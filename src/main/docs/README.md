@@ -7,7 +7,7 @@ Using the plugin with the standalone server
 -------------------------------------------
 
 To use the plugin with the standalone server of xrootd4j, download the
-standalone server from http://github.com/gbehrmann/xrootd4j and start
+standalone server from http://github.com/dCache/xrootd4j and start
 it with something like:
 
     java -Dlog=debug 
