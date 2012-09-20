@@ -34,11 +34,14 @@ class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHan
                          request : Int,
                          mode : FilePerm) : String =
   {
-    val applicableRules = mappings.find(rule => rule._1.r.findFirstIn(path).isDefined)
+    val rootfn = if (path.startsWith("root://")) path else "root://"+path
+    val applicableRules = mappings.find(rule => rule._1.r.findFirstIn(rootfn).isDefined)
 
-    applicableRules match {
-      case Some((pattern, replacement)) => pattern.r.replaceFirstIn(path, replacement)
+    val mapping = applicableRules match {
+      case Some((pattern, replacement)) => pattern.r.replaceFirstIn(rootfn, replacement)
       case None => path
     }
+    println("Map '" + rootfn + "' to '" + mapping + "'")
+    mapping
   }
 }

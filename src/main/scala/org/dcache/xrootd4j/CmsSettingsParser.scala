@@ -40,10 +40,7 @@ object CmsSettingsParser {
     def buildPathMatchFor(node : Node)(fromNodes : NodeSeq) : List[(String, String)] = {
 
       def nodesFilteredBy(protocol : String)(fromNodes : NodeSeq) =
-        fromNodes.filter(fromNode => fromNode.attribute("protocol") match {
-          case Some(p) => p.text == protocol
-          case None => false
-        })
+        fromNodes.filter(_.attribute("protocol").exists(_.text == protocol))
 
       def toMatchResultTupleListFrom(node : Node)(withAttributes : String => String)(fromNodes : NodeSeq) = {
         val subMatchResultTuples = buildPathMatchFor(node)(fromNodes)

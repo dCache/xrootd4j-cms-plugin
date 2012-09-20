@@ -22,7 +22,7 @@ import org.scalatest._
 import junit.JUnitRunner
 import org.junit.runner.RunWith
 
-@RunWith(classOf[JUnitRunner])
+// @RunWith(classOf[JUnitRunner])
 class CmsMappingHandlerTest extends FlatSpec
   with DesyRulesFixture {
 

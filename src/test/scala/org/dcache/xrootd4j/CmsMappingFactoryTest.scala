@@ -26,8 +26,8 @@ import java.util.Properties
 @RunWith(classOf[JUnitRunner])
 class CmsMappingFactoryTest extends FlatSpec {
 
-  "The CmsMappingFactory" should "have name xrootd4j.cms.settings" in {
-    assert(CmsMappingFactory.hasName("xrootd4j.cms.settings"))
+  "The CmsMappingFactory" should "have name xrootd4j-cms-plugin" in {
+    assert(CmsMappingFactory.hasName("xrootd4j-cms-plugin"))
   }
 
   it should "throw an NPE for null properties" in {

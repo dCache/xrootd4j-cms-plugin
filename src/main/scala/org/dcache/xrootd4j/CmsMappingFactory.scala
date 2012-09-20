@@ -25,7 +25,7 @@ import java.net.URL
 
 object CmsMappingFactory
 {
-    final val Name = "xrootd4j.cms.settings"
+    final val Name = "xrootd4j-cms-plugin"
 
     final val AlternativeNames = Set(Name)
 
@@ -45,7 +45,9 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
 
     override def createHandler = {
         val xml = XML.load(new URL(filename))
+        println("Creating mappings from " + filename + " with content " + xml )
         val mappings = CmsSettingsParser.parse(xml)
+        println("Mappings: " + mappings)
         new CmsMappingHandler(mappings)
     }
 }
