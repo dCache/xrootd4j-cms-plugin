@@ -22,41 +22,43 @@ import org.scalatest._
 import junit.JUnitRunner
 import org.junit.runner.RunWith
 
-// @RunWith(classOf[JUnitRunner])
-class CmsMappingHandlerTest extends FlatSpec
-  with DesyRulesFixture {
+@RunWith(classOf[JUnitRunner])
+class CmsMappingHandlerTest extends FlatSpec {
 
-  val map = CmsSettingsParser.parse(DesyStorageXmlFixture)
+  val map = CmsSettingsParser.parse(
+    <storage-mapping>
+      <lfn-to-pfn protocol="direct" path-match="sub1/(.*)" result="subchain1/$1"/>
+      <lfn-to-pfn protocol="direct" path-match="sub2/(.*)" result="subchain2/$1"/>
+      <lfn-to-pfn protocol="direct" path-match="role/path/(.*)" result="correctpath/$1"/>
+      <lfn-to-pfn protocol="root" path-match="/simple/(.*)" result="$1"/>
+      <lfn-to-pfn protocol="root" chain="direct" path-match="/chained/(.*)" result="/chainbase/$1"/>
+      <lfn-to-pfn protocol="root" path-match="/chained/role/(.*)" result="/wrongpath/$1"/>
+    </storage-mapping>)
+
   val handler = new CmsMappingHandler(map)
   val mappedFilenameFor = handler.authorize(null, null, null, _ : String, null, 0, null)
 
-  "The CMSMappingHandler with DESY rules" should "leave path with unmatched protocol unchanged" in {
-    expect("ftp://store/blubb") {
-      mappedFilenameFor("ftp://store/blubb")
-    }
-  }
-
   it should "leave an unmatched path unchanged" in {
-    expect("srm://unmatched/blubb") {
-      mappedFilenameFor("srm://unmatched/blubb")
+    expect("root://unmatched/blubb") {
+      mappedFilenameFor("root://unmatched/blubb")
     }
   }
 
   it should "map a matching path" in {
-    expect("root://xrootd.ba.infn.it//somepath/wurstbrot") {
-      mappedFilenameFor("remote-xrootd:///somepath/wurstbrot")
+    expect("wurstbrot") {
+      mappedFilenameFor("/simple/wurstbrot")
     }
   }
 
   it should "map a matching chained rule" in {
-    expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/schwupp/ti/du/temp/wurstbrot") {
-      mappedFilenameFor("srmv2:///schwupp/ti/du/temp/wurstbrot")
+    expect("/chainbase/subchain1/wurstbrot") {
+      mappedFilenameFor("/chained/sub1/wurstbrot")
     }
   }
 
-  it should "use the rules in the right order" in {
-    expect("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/unmerged/wurstbrot") {
-      mappedFilenameFor("dcap:////store/unmerged/DCMS/wurstbrot")
+  it should "use the first matching rule" in {
+    expect("/chainbase/correctpath/wurstbrot") {
+      mappedFilenameFor("/chained/role/path/wurstbrot")
     }
   }
 }

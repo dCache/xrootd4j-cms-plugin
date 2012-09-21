@@ -39,6 +39,7 @@ class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHan
     val rootfn = "root://"+path
     val applicableRules = mappings.find(rule => rule._1.r.findFirstIn(rootfn).isDefined)
     logger.trace("matching rules for '" + path + "': " + applicableRules)
+    println("matching rules for '" + path + "': " + applicableRules)
 
     log(logger.debug("mapping '" + path + "' to '{}'", _)) {
       applicableRules match {
