@@ -34,7 +34,7 @@ object CmsMappingFactory
     def hasName(name : String) = (AlternativeNames contains name)
 }
 
-class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
+class CmsMappingFactory(properties : Properties) extends AuthorizationFactory with Logging
 {
     val filename = properties.getProperty(CmsMappingFactory.FilenameProperty)
     require(Option(filename).nonEmpty)
@@ -44,10 +44,13 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory
     override def getDescription = "CMS Name Mapping Plugin"
 
     override def createHandler = {
-        val xml = XML.load(new URL(filename))
-        println("Creating mappings from " + filename + " with content " + xml )
-        val mappings = CmsSettingsParser.parse(xml)
-        println("Mappings: " + mappings)
-        new CmsMappingHandler(mappings)
+      logger.debug("creating mappings from '" + filename + "'")
+      val xml = XML.load(new URL(filename))
+      logger.trace("with content: \n" + xml)
+
+      val mappings = CmsSettingsParser.parse(xml)
+      logger.debug("mappings map: " + mappings)
+
+      new CmsMappingHandler(mappings)
     }
 }

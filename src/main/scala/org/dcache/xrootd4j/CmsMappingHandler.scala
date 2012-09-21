@@ -24,7 +24,9 @@ import javax.security.auth.Subject
 import org.dcache.xrootd.protocol.XrootdProtocol.FilePerm
 import org.dcache.xrootd.plugins.AuthorizationHandler
 
-class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHandler
+import org.slf4j.LoggerFactory
+
+class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHandler with Logging
 {
   override def authorize(subject : Subject,
                          localAddress : InetSocketAddress,
@@ -34,14 +36,15 @@ class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHan
                          request : Int,
                          mode : FilePerm) : String =
   {
-    val rootfn = if (path.startsWith("root://")) path else "root://"+path
+    val rootfn = "root://"+path
     val applicableRules = mappings.find(rule => rule._1.r.findFirstIn(rootfn).isDefined)
+    logger.trace("matching rules for '" + path + "': " + applicableRules)
 
-    val mapping = applicableRules match {
-      case Some((pattern, replacement)) => pattern.r.replaceFirstIn(rootfn, replacement)
-      case None => path
+    log(logger.debug("mapping '" + path + "' to '{}'", _)) {
+      applicableRules match {
+        case Some((pattern, replacement)) => pattern.r.replaceFirstIn(rootfn, replacement)
+        case None => path
+      }
     }
-    println("Map '" + rootfn + "' to '" + mapping + "'")
-    mapping
   }
 }
