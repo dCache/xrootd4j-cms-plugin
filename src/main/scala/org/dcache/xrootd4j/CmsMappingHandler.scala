@@ -26,7 +26,7 @@ import org.dcache.xrootd.plugins.AuthorizationHandler
 
 import org.slf4j.LoggerFactory
 
-class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHandler with Logging
+class CmsMappingHandler(mappings : Map[String, String], protocol : String) extends AuthorizationHandler with Logging
 {
   override def authorize(subject : Subject,
                          localAddress : InetSocketAddress,
@@ -36,7 +36,7 @@ class CmsMappingHandler(mappings : Map[String, String]) extends AuthorizationHan
                          request : Int,
                          mode : FilePerm) : String =
   {
-    val rootfn = "root://"+path
+    val rootfn = protocol+"://"+path
     val applicableRules = mappings.find(rule => rule._1.r.findFirstIn(rootfn).isDefined)
     logger.trace("matching rules for '" + path + "': " + applicableRules)
     println("matching rules for '" + path + "': " + applicableRules)

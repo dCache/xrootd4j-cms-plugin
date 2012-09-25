@@ -36,8 +36,24 @@ class CmsMappingFactoryTest extends FlatSpec {
     }
   }
 
+  it should "throw an IllegalArgumentException for empty properties" in {
+    intercept[IllegalArgumentException] {
+      new CmsMappingFactory(new Properties)
+    }
+  }
+
   it should "throw an IllegalArgumentException if the file property is missing" in {
     intercept[IllegalArgumentException] {
+      val properties = new Properties
+      properties.put(CmsMappingFactory.FilenameProperty, "http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/COMP/SITECONF/T2_DE_DESY/PhEDEx/storage.xml?revision=1.10&content-type=text%2Fplain")
+      new CmsMappingFactory(new Properties)
+    }
+  }
+
+  it should "throw an IllegalArgumentException if the protocol property is missing" in {
+    intercept[IllegalArgumentException] {
+      val properties = new Properties
+      properties.put(CmsMappingFactory.ProtocolProperty, "root")
       new CmsMappingFactory(new Properties)
     }
   }
@@ -45,6 +61,7 @@ class CmsMappingFactoryTest extends FlatSpec {
   it should "create a handler based on the file at an URL" in {
     val properties = new Properties()
     properties.put(CmsMappingFactory.FilenameProperty, "http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/COMP/SITECONF/T2_DE_DESY/PhEDEx/storage.xml?revision=1.10&content-type=text%2Fplain")
+    properties.put(CmsMappingFactory.ProtocolProperty, "root")
     new CmsMappingFactory(properties)
   }
 }

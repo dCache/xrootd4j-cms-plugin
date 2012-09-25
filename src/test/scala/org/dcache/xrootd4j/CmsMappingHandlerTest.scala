@@ -35,7 +35,7 @@ class CmsMappingHandlerTest extends FlatSpec {
       <lfn-to-pfn protocol="root" path-match="/chained/role/(.*)" result="/wrongpath/$1"/>
     </storage-mapping>)
 
-  val handler = new CmsMappingHandler(map)
+  val handler = new CmsMappingHandler(map, "root")
   val mappedFilenameFor = handler.authorize(null, null, null, _ : String, null, 0, null)
 
   it should "leave an unmatched path unchanged" in {

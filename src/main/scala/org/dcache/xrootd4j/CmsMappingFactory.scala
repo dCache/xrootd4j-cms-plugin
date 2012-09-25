@@ -29,7 +29,8 @@ object CmsMappingFactory
 
     final val AlternativeNames = Set(Name)
 
-    final val FilenameProperty = "xrootd.cms.storage.path"
+    final val FilenameProperty = "xrootd.cms.tfc.path"
+    final val ProtocolProperty = "xrootd.cms.tfc.protocol"
 
     def hasName(name : String) = (AlternativeNames contains name)
 }
@@ -38,6 +39,9 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory wi
 {
     val filename = properties.getProperty(CmsMappingFactory.FilenameProperty)
     require(Option(filename).nonEmpty)
+
+    val protocol = properties.getProperty(CmsMappingFactory.ProtocolProperty)
+    require(Option(protocol).nonEmpty)
 
     override def getName = CmsMappingFactory.Name
 
@@ -51,6 +55,6 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory wi
       val mappings = CmsSettingsParser.parse(xml)
       logger.debug("mappings map: " + mappings)
 
-      new CmsMappingHandler(mappings)
+      new CmsMappingHandler(mappings, protocol)
     }
 }

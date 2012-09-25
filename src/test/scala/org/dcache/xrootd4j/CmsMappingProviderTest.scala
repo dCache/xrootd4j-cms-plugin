@@ -31,6 +31,7 @@ class CmsMappingProviderTest extends FlatSpec {
   "A CMS mapping provider" should "return a CmsMappingFactory if called with the factories name" in {
     val properties = new Properties()
     properties.put(CmsMappingFactory.FilenameProperty, "settings.xml")
+    properties.put(CmsMappingFactory.ProtocolProperty, "root")
     val factory = provider.createFactory(CmsMappingFactory.Name, properties)
 
     assert(factory != null)
