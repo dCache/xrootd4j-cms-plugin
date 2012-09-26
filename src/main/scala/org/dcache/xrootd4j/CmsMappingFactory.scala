@@ -25,7 +25,7 @@ import java.net.URL
 
 object CmsMappingFactory
 {
-    final val Name = "xrootd4j-cms-plugin"
+    final val Name = "cms-tfc"
 
     final val AlternativeNames = Set(Name)
 

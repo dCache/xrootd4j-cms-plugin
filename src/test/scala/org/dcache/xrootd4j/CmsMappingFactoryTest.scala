@@ -26,8 +26,8 @@ import java.util.Properties
 @RunWith(classOf[JUnitRunner])
 class CmsMappingFactoryTest extends FlatSpec {
 
-  "The CmsMappingFactory" should "have name xrootd4j-cms-plugin" in {
-    assert(CmsMappingFactory.hasName("xrootd4j-cms-plugin"))
+  "The CmsMappingFactory" should "have name cms-tfc" in {
+    assert(CmsMappingFactory.hasName("cms-tfc"))
   }
 
   it should "throw an NPE for null properties" in {
@@ -42,7 +42,7 @@ class CmsMappingFactoryTest extends FlatSpec {
     }
   }
 
-  it should "throw an IllegalArgumentException if the file property is missing" in {
+  it should "throw an IllegalArgumentException if the protocol property is missing" in {
     intercept[IllegalArgumentException] {
       val properties = new Properties
       properties.put(CmsMappingFactory.FilenameProperty, "http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/COMP/SITECONF/T2_DE_DESY/PhEDEx/storage.xml?revision=1.10&content-type=text%2Fplain")
@@ -50,7 +50,7 @@ class CmsMappingFactoryTest extends FlatSpec {
     }
   }
 
-  it should "throw an IllegalArgumentException if the protocol property is missing" in {
+  it should "throw an IllegalArgumentException if the filename property is missing" in {
     intercept[IllegalArgumentException] {
       val properties = new Properties
       properties.put(CmsMappingFactory.ProtocolProperty, "root")
