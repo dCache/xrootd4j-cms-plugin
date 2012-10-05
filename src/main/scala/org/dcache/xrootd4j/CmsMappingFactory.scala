@@ -49,7 +49,10 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory wi
 
     override def createHandler = {
       logger.debug("creating mappings from '" + filename + "'")
-      val xml = XML.load(new URL(filename))
+      val xml = filename match {
+        case "^[^:]+://" => XML.load(filename)
+        case _ => XML.loadFile(filename)
+      }
       logger.trace("with content: \n" + xml)
 
       val mappings = CmsSettingsParser.parse(xml)
