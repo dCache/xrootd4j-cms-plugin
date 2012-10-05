@@ -33,6 +33,7 @@ class CmsMappingHandlerTest extends FlatSpec {
       <lfn-to-pfn protocol="root" path-match="/simple/(.*)" result="$1"/>
       <lfn-to-pfn protocol="root" chain="direct" path-match="/chained/(.*)" result="/chainbase/$1"/>
       <lfn-to-pfn protocol="root" path-match="/chained/role/(.*)" result="/wrongpath/$1"/>
+      <lfn-to-pfn protocol="root" path-match="/one/(.*)/two/(.*)" result="$1$2"/>
     </storage-mapping>)
 
   val handler = new CmsMappingHandler(map, "root")
@@ -59,6 +60,12 @@ class CmsMappingHandlerTest extends FlatSpec {
   it should "use the first matching rule" in {
     expect("/chainbase/correctpath/wurstbrot") {
       mappedFilenameFor("/chained/role/path/wurstbrot")
+    }
+  }
+
+  it should "be able to understand patterns with two groups" in {
+    expect("firstsecond") {
+      mappedFilenameFor("/one/first/two/second")
     }
   }
 }

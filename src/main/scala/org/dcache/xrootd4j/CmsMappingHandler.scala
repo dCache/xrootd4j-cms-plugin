@@ -43,7 +43,7 @@ class CmsMappingHandler(mappings : Map[String, String], protocol : String) exten
 
     log(logger.debug("mapping '" + path + "' to '{}'", _)) {
       applicableRules match {
-        case Some((pattern, replacement)) => pattern.r.replaceFirstIn(rootfn, replacement)
+        case Some((pattern, replacement)) => pattern.r.replaceAllIn(rootfn, replacement)
         case None => path
       }
     }
