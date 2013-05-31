@@ -27,4 +27,4 @@ file in /usr/local/share/dcache/plugins/
 
 To enable the plugin, define the following property in dcache.conf:
 
-    xrootdAuthzPlugin=org.dcache.xrootd4j
+    xrootd/xrootdPlugins=gplazma=none,authz=cms-tfc
