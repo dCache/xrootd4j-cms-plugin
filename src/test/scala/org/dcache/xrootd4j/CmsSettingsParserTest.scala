@@ -56,7 +56,7 @@ class CmsSettingsParserTest extends FlatSpec
       </storage-mapping>)
 
 
-    expect("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/$1") {
+    assertResult("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/$1") {
       map.get("srm:///+(.*)").get
     }
   }
@@ -69,10 +69,10 @@ class CmsSettingsParserTest extends FlatSpec
       <lfn-to-pfn protocol="srm" chain="direct" path-match="(.*)" result="srm://srm.cern.ch/srm/managerv1?SFN=$1"/>
     </storage-mapping>)
 
-    expect("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/store/$1") {
+    assertResult("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/store/$1") {
       map.get("srm:///+store/(.*)").get
     }
-    expect("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/$1") {
+    assertResult("srm://srm.cern.ch/srm/managerv1?SFN=/castor/cern.ch/cms/$1") {
       map.get("srm:///+(.*)").get
     }
   }
@@ -81,59 +81,59 @@ class CmsSettingsParserTest extends FlatSpec
     val map = CmsSettingsParser.parse(DesyStorageXmlFixture)
 
     it should "understand rules at DESY" in {
-      expect(32)(map.size)
+      assertResult(32)(map.size)
     }
 
     "A map from DESY rules" should "contain mapping for srm LoadTest07" in {
-      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
+      assertResult("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
         map.get("srm://.*/LoadTest07_DESY_(.*)_.*_.*").get
       }
     }
 
     it should "contain mapping for srmv2 LoadTest07" in {
-      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
+      assertResult("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/store/phedex_monarctest/monarctest_DESY/MonarcTest_DESY_$1") {
         map.get("srmv2://.*/LoadTest07_DESY_(.*)_.*_.*").get
       }
     }
 
     it should "contain mapping for srm PhEDEx LoadTest07" in {
-      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
+      assertResult("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
         map.get("srm:///+store/PhEDEx_LoadTest07/(.*)").get
       }
     }
 
     it should "contain mapping for srmv2 PhEDEx LoadTest07" in {
-      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
+      assertResult("srm://dcache-se-cms.desy.de:8443/srm/managerv2?SFN=/pnfs/desy.de/cms/tier2/loadtest/$1") {
         map.get("srmv2:///+store/PhEDEx_LoadTest07/(.*)").get
       }
     }
 
     it should "contain mapping for dcap JobRobot" in {
-      expect("root://dcache-cms-xrootd.desy.de/pnfs/desy.de/cms/tier2/store/mc/JobRobot/$1") {
+      assertResult("root://dcache-cms-xrootd.desy.de/pnfs/desy.de/cms/tier2/store/mc/JobRobot/$1") {
         map.get("dcap:///+store/mc/JobRobot/(.*)").get
       }
     }
 
     it should "contain mapping for remote-xrootd" in {
-      expect("root://xrootd.ba.infn.it//$1") {
+      assertResult("root://xrootd.ba.infn.it//$1") {
         map.get("remote-xrootd:///+(.*)").get
       }
     }
 
     it should "contain chained mapping for dcap" in {
-      expect("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/$1") {
+      assertResult("dcap://dcache-cms-dcap.desy.de//pnfs/desy.de/cms/analysis/dcms/$1") {
         map.get("dcap:///+store/DCMS/(.*)").get
       }
     }
 
     it should "contain chained mapping for gsidcap" in {
-      expect("gsidcap://dcache-cms-gsidcap.desy.de:22128//pnfs/desy.de/cms/analysis/dcms/unmerged/$1") {
+      assertResult("gsidcap://dcache-cms-gsidcap.desy.de:22128//pnfs/desy.de/cms/analysis/dcms/unmerged/$1") {
         map.get("gsidcap:///+store/unmerged/DCMS/(.*)").get
       }
     }
 
     it should "contain chained mapping for srm" in {
-      expect("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/$1") {
+      assertResult("srm://dcache-se-cms.desy.de:8443/srm/managerv1?SFN=/pnfs/desy.de/cms/tier2/$1") {
         map.get("srm:///+(.*)").get
       }
     }
@@ -142,9 +142,9 @@ class CmsSettingsParserTest extends FlatSpec
   "The storage parser" should "understand the rules at CERN" in {
     val map = CmsSettingsParser.parse(CernStorageXmlFixture)
 
-    expect(63)(map.size)
+    assertResult(63)(map.size)
 
-    expect("srm://srm-cms.cern.ch:8443/srm/managerv2?SFN=/castor/cern.ch/cms/store/PhEDEx_LoadTest07_4/LoadTest07_CERN_$1") {
+    assertResult("srm://srm-cms.cern.ch:8443/srm/managerv2?SFN=/castor/cern.ch/cms/store/PhEDEx_LoadTest07_4/LoadTest07_CERN_$1") {
       map.get("srmv2://.*/LoadTest07_.*_CERN_(.*)_.*_.*").get
     }
   }

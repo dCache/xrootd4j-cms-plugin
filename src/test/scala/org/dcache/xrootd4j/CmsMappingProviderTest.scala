@@ -38,7 +38,7 @@ class CmsMappingProviderTest extends FlatSpec {
   }
 
   it should "return null for non matching names" in {
-    expect (null) {
+    assertResult(null) {
       provider.createFactory("other", new Properties())
     }
   }

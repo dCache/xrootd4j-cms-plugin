@@ -40,31 +40,31 @@ class CmsMappingHandlerTest extends FlatSpec {
   val mappedFilenameFor = handler.authorize(null, null, null, _ : String, null, 0, null)
 
   it should "leave an unmatched path unchanged" in {
-    expect("root://unmatched/blubb") {
+    assertResult("root://unmatched/blubb") {
       mappedFilenameFor("root://unmatched/blubb")
     }
   }
 
   it should "map a matching path" in {
-    expect("wurstbrot") {
+    assertResult("wurstbrot") {
       mappedFilenameFor("/simple/wurstbrot")
     }
   }
 
   it should "map a matching chained rule" in {
-    expect("/chainbase/subchain1/wurstbrot") {
+    assertResult("/chainbase/subchain1/wurstbrot") {
       mappedFilenameFor("/chained/sub1/wurstbrot")
     }
   }
 
   it should "use the first matching rule" in {
-    expect("/chainbase/correctpath/wurstbrot") {
+    assertResult("/chainbase/correctpath/wurstbrot") {
       mappedFilenameFor("/chained/role/path/wurstbrot")
     }
   }
 
   it should "be able to understand patterns with two groups" in {
-    expect("firstsecond") {
+    assertResult("firstsecond") {
       mappedFilenameFor("/one/first/two/second")
     }
   }
