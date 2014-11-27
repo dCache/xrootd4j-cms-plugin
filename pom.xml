@@ -4,7 +4,7 @@
 
   <groupId>org.dcache.xrootd4j</groupId>
   <artifactId>xrootd4j-cms-plugin</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.3.7-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>CMS lfn-to-pfn mapping plugin</name>
@@ -21,7 +21,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.slf4j>1.7.5</version.slf4j>
-    <version.xrootd4j>1.3.2-SNAPSHOT</version.xrootd4j>
+    <version.xrootd4j>1.3.7-SNAPSHOT</version.xrootd4j>
   </properties>
 
   <repositories>
