@@ -21,7 +21,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.slf4j>1.7.5</version.slf4j>
-    <version.xrootd4j>2.2.0-SNAPSHOT</version.xrootd4j>
+    <version.xrootd4j>4.0.4</version.xrootd4j>
+    <version.scala.binary>2.12</version.scala.binary>
+    <version.scala>2.12.3</version.scala>
   </properties>
 
   <repositories>
@@ -61,13 +63,24 @@
     <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-library</artifactId>
-        <version>2.11.2</version>
+        <version>${version.scala}</version>
     </dependency>
     <dependency>
         <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_2.11</artifactId>
-        <version>2.2.1</version>
+        <artifactId>scalatest_2.12</artifactId>
+        <version>3.0.4</version>
         <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.scalatestplus</groupId>
+        <artifactId>junit-4-13_2.12</artifactId>
+        <version>3.2.2.0</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-lang.modules</groupId>
+      <artifactId>scala-xml_2.12</artifactId>
+      <version>1.1.0</version>
     </dependency>
   </dependencies>
 
@@ -78,6 +91,10 @@
                   <groupId>net.alchim31.maven</groupId>
                   <artifactId>scala-maven-plugin</artifactId>
                   <version>3.1.6</version>
+                  <configuration>
+                      <scalaCompatVersion>${version.scala.binary}</scalaCompatVersion>
+                      <scalaVersion>${version.scala}</scalaVersion>
+                  </configuration>
               </plugin>
           </plugins>
       </pluginManagement>
@@ -90,6 +107,14 @@
                   <source>1.7</source>
                   <target>1.7</target>
               </configuration>
+              <executions>
+                  <execution>
+                      <phase>compile</phase>
+                      <goals>
+                          <goal>compile</goal>
+                      </goals>
+                  </execution>
+              </executions>
           </plugin>
           
           <plugin>
@@ -114,18 +139,6 @@
               </executions>
           </plugin>
 
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <executions>
-                  <execution>
-                      <phase>compile</phase>
-                      <goals>
-                          <goal>compile</goal>
-                      </goals>
-                  </execution>
-              </executions>
-          </plugin>
           <plugin>
               <groupId>com.mycila.maven-license-plugin</groupId>
               <artifactId>maven-license-plugin</artifactId>
@@ -199,13 +212,13 @@
                   </defineStatements>
                   <mappings>
                       <mapping>
-                          <directory>/usr/local/share/dcache/plugins/xrootd4j-cms-plugin-${version}</directory>
+                          <directory>/usr/local/share/dcache/plugins/xrootd4j-cms-plugin-${project.version}</directory>
                           <filemode>755</filemode>
                           <username>dcache</username>
                           <groupname>dcache</groupname>
                           <sources>
                               <source>
-                                  <location>target/xrootd4j-cms-plugin-${version}/xrootd4j-cms-plugin-${version}</location>
+                                  <location>target/xrootd4j-cms-plugin-${project.version}/xrootd4j-cms-plugin-${project.version}</location>
                               </source>
                           </sources>
                       </mapping>
