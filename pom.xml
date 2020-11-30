@@ -30,7 +30,7 @@
         <url>https://github.com/dCache/xrootd4j-cms-plugin</url>
         <connection>scm:git:https://github.com/dCache/xrootd4j-cms-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/dCache/xrootd4j-cms-plugin.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>release/4.0</tag>
     </scm>
 
   <repositories>
