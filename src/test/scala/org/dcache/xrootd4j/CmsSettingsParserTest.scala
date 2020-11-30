@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2014 dCache.org <support@dcache.org>
+ * Copyright (C) 2011-2020 dCache.org <support@dcache.org>
  *
  * This file is part of xrootd4j-cms-plugin.
  *
@@ -19,9 +19,9 @@
  */
 package org.dcache.xrootd4j
 
-import org.scalatest._
-import junit.JUnitRunner
 import org.junit.runner.RunWith
+import org.scalatest._
+import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class CmsSettingsParserTest extends FlatSpec

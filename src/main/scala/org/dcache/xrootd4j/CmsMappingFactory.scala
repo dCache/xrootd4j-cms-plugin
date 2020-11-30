@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011-2014 dCache.org <support@dcache.org>
+ * Copyright (C) 2011-2020 dCache.org <support@dcache.org>
  *
  * This file is part of xrootd4j-cms-plugin.
  *
@@ -20,6 +20,7 @@
 package org.dcache.xrootd4j
 
 import org.dcache.xrootd.plugins.AuthorizationFactory
+import io.netty.channel.ChannelHandlerContext;
 import java.util.Properties
 import xml.XML
 import java.net.URL
@@ -48,7 +49,7 @@ class CmsMappingFactory(properties : Properties) extends AuthorizationFactory wi
 
     override def getDescription = "CMS Name Mapping Plugin"
 
-    override def createHandler = {
+    override def createHandler(ctx : ChannelHandlerContext) = {
       logger.debug("creating mappings from '" + filename + "'")
       val xml = filename match {
         case "^[^:]+://" => XML.load(filename)
