@@ -4,7 +4,7 @@
 
   <groupId>org.dcache.xrootd4j</groupId>
   <artifactId>xrootd4j-cms-plugin</artifactId>
-  <version>4.0.4</version>
+  <version>4.0.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>CMS lfn-to-pfn mapping plugin</name>
@@ -25,6 +25,13 @@
     <version.scala.binary>2.12</version.scala.binary>
     <version.scala>2.12.3</version.scala>
   </properties>
+
+    <scm>
+        <url>https://github.com/dCache/xrootd4j-cms-plugin</url>
+        <connection>scm:git:https://github.com/dCache/xrootd4j-cms-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/dCache/xrootd4j-cms-plugin.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
   <repositories>
     <repository>
@@ -78,9 +85,9 @@
         <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.scala-lang.modules</groupId>
-      <artifactId>scala-xml_2.12</artifactId>
-      <version>1.1.0</version>
+        <groupId>org.scala-lang.modules</groupId>
+        <artifactId>scala-xml_2.12</artifactId>
+        <version>1.1.0</version>
     </dependency>
   </dependencies>
 
@@ -150,9 +157,11 @@
                       <exclude>.gitignore</exclude>
                       <exclude>LICENSE.txt</exclude>
                       <exclude>README.md</exclude>
+                      <exclude>target/**</exclude>
                       <exclude>.idea/**</exclude>
                       <exclude>*.releaseBackup</exclude>
                       <exclude>release-pom.xml</exclude>
+                      <exclude>xrootd4j-cms-plugin.iml</exclude>
                   </excludes>
               </configuration>
               <executions>
